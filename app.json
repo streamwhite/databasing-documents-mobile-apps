@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "_expo-tmp",
-    "slug": "_expo-tmp",
+    "name": "niuniu-cal",
+    "slug": "niuniu-cal",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -13,7 +13,8 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.herwidget.niuniucal"
     },
     "android": {
       "adaptiveIcon": {
@@ -21,10 +22,16 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.herwidget.niuniucal"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "b90f4534-41fa-4ef6-9b2a-5d7ba4de3b6f"
+      }
     }
   }
 }
