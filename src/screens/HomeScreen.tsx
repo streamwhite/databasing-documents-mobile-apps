@@ -1,30 +1,22 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { APP_DISPLAY_NAME } from '../app-config';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { DocumentUploadSection } from './DocumentUploadSection';
+import { QuerySection } from './QuerySection';
 
 export function HomeScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{APP_DISPLAY_NAME}</Text>
-      <Text style={styles.placeholder}>Home — placeholder</Text>
-    </View>
+    <ScrollView
+      style={styles.scroll}
+      contentContainerStyle={styles.content}
+      keyboardShouldPersistTaps="handled"
+    >
+      <DocumentUploadSection />
+      <QuerySection />
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 8,
-  },
-  placeholder: {
-    fontSize: 14,
-    color: '#666',
-  },
+  scroll: { flex: 1, backgroundColor: '#fff' },
+  content: { padding: 16, paddingBottom: 32 },
 });

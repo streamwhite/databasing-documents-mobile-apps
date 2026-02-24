@@ -2,7 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { HomeScreen } from '../screens/HomeScreen';
-import { ProfileScreen } from '../screens/ProfileScreen';
+import { ProfileStack } from './ProfileStack';
 import {
   TAB_BAR_BG,
   TAB_BAR_BORDER,
@@ -41,11 +41,12 @@ export function TabNavigator() {
       />
       <Tab.Screen
         name="Profile"
-        component={ProfileScreen}
+        component={ProfileStack}
         options={{
           title: TAB_LABEL_PROFILE,
           tabBarLabel: TAB_LABEL_PROFILE,
           tabBarIcon: profileTabIcon,
+          headerShown: false,
         }}
       />
     </Tab.Navigator>
