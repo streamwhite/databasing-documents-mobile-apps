@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "niuniu-cal",
-    "slug": "niuniu-cal",
+    "name": "databasing-documents-mobile-apps",
+    "slug": "databasing-documents-mobile-apps",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -14,7 +14,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.herwidget.niuniucal"
+      "bundleIdentifier": "com.herwidget.databasingdocuments"
     },
     "android": {
       "adaptiveIcon": {
@@ -23,14 +23,15 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.herwidget.niuniucal"
+      "package": "com.herwidget.databasingdocuments"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
+    "owner": "herwidget",
     "extra": {
       "eas": {
-        "projectId": "b90f4534-41fa-4ef6-9b2a-5d7ba4de3b6f"
+        "projectId": "38089b99-ce75-4136-a89f-dcee29a3ddac"
       }
     }
   }

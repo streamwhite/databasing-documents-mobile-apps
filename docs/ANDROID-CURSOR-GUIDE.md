@@ -1,5 +1,19 @@
 # Run on Real Android & Debug in Cursor
 
+## Android SDK (ANDROID_HOME)
+
+Expo/React Native needs the Android SDK path when opening on Android (emulator or device). If you see **"Failed to resolve the Android SDK path"**:
+
+1. **Find your SDK path.** Common locations:
+   - Android Studio default: `$HOME/Android/Sdk`
+   - Android Studio: **Settings → Appearance & Behavior → System Settings → Android SDK** → “Android SDK location”.
+2. **Set for this terminal:**  
+   `export ANDROID_HOME=/path/to/your/Android/Sdk`  
+   (Use your actual path, e.g. `export ANDROID_HOME=$HOME/Android/Sdk`.)
+3. **Optional:** Add the same `export` line to `~/.zshrc` or `~/.bashrc` so it’s set in every new terminal.
+
+Optional: copy `scripts/env-android.example.sh` to `scripts/env-android.sh`, set the path if needed, then run `source ./scripts/env-android.sh` before `pnpm start`.
+
 ## Run on physical Android device
 
 1. **On phone:** Settings → About → tap Build number 7× → back → Developer options → enable **USB debugging**.
@@ -63,7 +77,7 @@ Use **EAS Build** to produce a release build for distribution (Google Play or si
 1. **Configure (one-time):** In project root run `eas build:configure`. This creates or updates `eas.json`. The repo already has `eas.json` with a `production` profile that outputs **AAB** (Android App Bundle), which is required for Google Play.
 2. **Build:**  
    `eas build -p android --profile production`
-3. Build runs on Expo’s servers. When it finishes, download the `.aab` from the [EAS dashboard](https://expo.dev/accounts/[your-account]/projects/niuniu-cal/builds) or from the CLI link.
+3. Build runs on Expo’s servers. When it finishes, download the `.aab` from the [EAS dashboard](https://expo.dev/accounts/[your-account]/projects/databasing-documents-mobile-apps/builds) or from the CLI link.
 4. **Upload to Play Console:** In [Google Play Console](https://play.google.com/console) create (or select) the app, then upload the AAB in Release → Production (or internal testing).
 
 ### Production APK (sideload / direct install)

@@ -4,5 +4,6 @@ module.exports = {
   testEnvironment: 'node',
   testMatch: ['**/__tests__/**/*.test.ts', '**/*.test.ts'],
   moduleFileExtensions: ['ts', 'js'],
-  collectCoverageFrom: ['src/niuniu/**/*.ts', '!src/niuniu/**/*.test.ts'],
+  collectCoverageFrom: ['src/**/*.ts', '!src/**/*.test.ts'],
+  passWithNoTests: true,
 };
