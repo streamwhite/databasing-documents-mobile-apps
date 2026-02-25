@@ -51,10 +51,18 @@ export function useLoginForm() {
     try {
       const result = await login({ email: email.trim(), password, tenant_id: tenantId });
       if (result.ok) {
+        const tenantName =
+          selectedTenant?.tenant_name ??
+          (result.data as { tenant_name?: string }).tenant_name ??
+          '';
+        const userName =
+          (result.data as { user_name?: string }).user_name ?? '';
         await setAuth({
           access_token: result.data.access_token,
           refresh_token: result.data.refresh_token,
           tenant_id: tenantId,
+          tenant_name: tenantName,
+          user_name: userName,
         });
         (nav as { goBack: () => void }).goBack();
       } else {

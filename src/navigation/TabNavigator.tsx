@@ -27,14 +27,13 @@ export function TabNavigator() {
     <Tab.Navigator
       screenOptions={{
         tabBarStyle: { backgroundColor: TAB_BAR_BG, borderTopColor: TAB_BAR_BORDER },
-        headerShown: true,
+        headerShown: false,
       }}
     >
       <Tab.Screen
         name="Home"
         component={HomeScreen}
         options={{
-          title: TAB_LABEL_HOME,
           tabBarLabel: TAB_LABEL_HOME,
           tabBarIcon: homeTabIcon,
         }}
@@ -43,10 +42,8 @@ export function TabNavigator() {
         name="Profile"
         component={ProfileStack}
         options={{
-          title: TAB_LABEL_PROFILE,
           tabBarLabel: TAB_LABEL_PROFILE,
           tabBarIcon: profileTabIcon,
-          headerShown: false,
         }}
       />
     </Tab.Navigator>

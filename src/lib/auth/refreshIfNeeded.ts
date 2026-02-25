@@ -29,6 +29,8 @@ export async function refreshAccessIfNeeded(): Promise<string | null> {
     access_token: result.data.access_token,
     refresh_token: result.data.refresh_token,
     tenant_id: auth.tenant_id,
+    tenant_name: auth.tenant_name,
+    user_name: auth.user_name,
   };
   await setStoredAuth(next);
   return next.access_token;

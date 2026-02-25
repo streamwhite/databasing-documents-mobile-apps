@@ -20,7 +20,9 @@ export interface TokenResponse {
   access_token: string;
   token_type: string;
   refresh_token: string;
-  balance: string;
+  balance?: string;
+  tenant_name?: string;
+  user_name?: string;
 }
 
 export interface RefreshParams {
@@ -42,4 +44,6 @@ export interface StoredAuth {
   access_token: string;
   refresh_token: string;
   tenant_id: string;
+  tenant_name: string;
+  user_name: string;
 }

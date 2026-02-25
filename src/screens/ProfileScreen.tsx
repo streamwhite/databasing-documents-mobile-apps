@@ -8,10 +8,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   AUTH_BTN_LOGIN,
   AUTH_BTN_LOGOUT,
   AUTH_BTN_REGISTER,
+  AUTH_LABEL_TENANT_NAME,
+  AUTH_LABEL_USER_NAME,
 } from '../app-config';
 import { useAuth } from '../context/AuthContext';
 import type { ProfileStackParamList } from '../navigation/ProfileStack';
@@ -38,37 +41,46 @@ export function ProfileScreen() {
 
   if (isLoading) {
     return (
-      <View style={styles.centered}>
-        <ActivityIndicator size='large' />
-      </View>
+      <SafeAreaView style={styles.safe} edges={['top']}>
+        <View style={styles.centered}>
+          <ActivityIndicator size='large' />
+        </View>
+      </SafeAreaView>
     );
   }
 
   if (!auth) {
     return (
-      <View style={styles.container}>
-        <TouchableOpacity style={styles.button} onPress={goLogin}>
-          <Text style={styles.buttonText}>{AUTH_BTN_LOGIN}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonSecondary} onPress={goRegister}>
-          <Text style={styles.buttonSecondaryText}>{AUTH_BTN_REGISTER}</Text>
-        </TouchableOpacity>
-      </View>
+      <SafeAreaView style={styles.safe} edges={['top']}>
+        <View style={styles.container}>
+          <TouchableOpacity style={styles.button} onPress={goLogin}>
+            <Text style={styles.buttonText}>{AUTH_BTN_LOGIN}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.buttonSecondary} onPress={goRegister}>
+            <Text style={styles.buttonSecondaryText}>{AUTH_BTN_REGISTER}</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
     );
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>组织或企业 ID</Text>
-      <Text style={styles.value}>{auth.tenant_id}</Text>
-      <TouchableOpacity style={styles.buttonOutlined} onPress={handleLogout}>
-        <Text style={styles.buttonOutlinedText}>{AUTH_BTN_LOGOUT}</Text>
-      </TouchableOpacity>
-    </View>
+    <SafeAreaView style={styles.safe} edges={['top']}>
+      <View style={styles.container}>
+        <Text style={styles.label}>{AUTH_LABEL_TENANT_NAME}</Text>
+        <Text style={styles.value}>{auth.tenant_name || '—'}</Text>
+        <Text style={styles.label}>{AUTH_LABEL_USER_NAME}</Text>
+        <Text style={styles.value}>{auth.user_name || '—'}</Text>
+        <TouchableOpacity style={styles.buttonOutlined} onPress={handleLogout}>
+          <Text style={styles.buttonOutlinedText}>{AUTH_BTN_LOGOUT}</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safe: { flex: 1, backgroundColor: '#fff' },
   centered: {
     flex: 1,
     justifyContent: 'center',

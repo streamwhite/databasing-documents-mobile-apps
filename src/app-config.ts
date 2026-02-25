@@ -27,6 +27,7 @@ export const MSG_PICK_ERROR = '出错';
 /** Home screen: upload document (choose take photo or pick, then upload) */
 export const BTN_UPLOAD_DOCUMENT = '上传文档';
 export const UPLOAD_CHOICE_TITLE = '选择方式';
+export const UPLOAD_CHOICE_MULTIPLE_HINT = '从相册选择时可一次选择多个文件。';
 export const UPLOAD_OPTION_CAMERA = '拍摄';
 export const UPLOAD_OPTION_GALLERY = '选择文件或图片';
 export const UPLOAD_OPTION_CANCEL = '取消';
@@ -48,13 +49,17 @@ export const LABEL_EXTRACT_FILES = '已选文件';
 export const CHECKBOX_UNCHECKED = '☐';
 export const CHECKBOX_CHECKED = '☑';
 
+/** Home screen: section titles (distinguish extract vs query) */
+export const LABEL_SECTION_EXTRACT = '上传与提取';
+export const LABEL_SECTION_QUERY = '查询';
+
 /** Home screen: query */
+export const LABEL_QUERY_INPUT = '查询已提取的文档内容';
 export const PLACEHOLDER_QUERY = '输入查询条件';
-export const BTN_SEND_QUERY = '发送查询';
+export const BTN_SEND_QUERY = '查询';
 export const MSG_QUERY_OK = '查询成功';
 export const MSG_QUERY_ERROR = '查询失败';
 export const MSG_QUERY_LOADING = '查询中...';
-export const LABEL_QUERY_SQL = 'SQL';
 
 /** Auth: labels and placeholders */
 export const AUTH_LABEL_EMAIL = '邮箱';
@@ -96,3 +101,25 @@ export const AUTH_TENANT_LOADING = '正在加载租户...';
 export const AUTH_TENANT_EMPTY = '未找到租户';
 export const AUTH_TENANT_FETCH_FAILED = '获取租户列表失败';
 export const AUTH_TENANT_REQUEST_LABEL = '请求';
+
+/** App: limited-features notice overlay */
+export const NOTICE_LIMITED_TITLE = '提示';
+export const NOTICE_LIMITED_MESSAGE = '本应用功能有限，完整功能请使用网页版：';
+export const NOTICE_WEB_URL = 'http://di.piaosiyuan.cn';
+export const NOTICE_DISMISS_LABEL = '知道了';
+export const NOTICE_TIMEOUT_MS = 6000;
+
+/** Usage limits: per-day counts for extract/query */
+export const USAGE_DAILY_LIMIT = 5;
+export const MSG_USAGE_EXTRACT_LIMIT =
+  '今日提取次数已达上限，请明天再试。';
+export const MSG_USAGE_QUERY_LIMIT =
+  '今日查询次数已达上限，请明天再试。';
+
+/** No-login (device) limit: clear notice for testing mode when front or backend enforces. */
+export const MSG_DEVICE_DAILY_LIMIT =
+  '今日次数已达上限（设备限制）。登录后可继续使用。';
+
+/** No-login (testing): notice that uploaded documents may be deleted after 7 days */
+export const NOTICE_NO_LOGIN_7DAY =
+  '测试模式（未登录）：上传的文档可能在 7 天后被删除，请知悉。';

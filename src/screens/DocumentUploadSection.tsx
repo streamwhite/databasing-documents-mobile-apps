@@ -1,29 +1,34 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 import Toast from 'react-native-toast-message';
 import {
   BTN_EXTRACT,
   BTN_UPLOAD_DOCUMENT,
   LABEL_CATEGORY,
+  LABEL_EXTRACT_FILES,
+  LABEL_SECTION_EXTRACT,
   MSG_CAMERA_CANCELLED,
   MSG_CAMERA_ERROR,
   MSG_CAMERA_PERMISSION_DENIED,
   MSG_EXTRACT_ERROR,
   MSG_EXTRACT_LOADING,
-  LABEL_EXTRACT_FILES,
-  MSG_EXTRACT_NEED_LOGIN,
+  MSG_DEVICE_DAILY_LIMIT,
   MSG_EXTRACT_NO_FIELDS,
   MSG_EXTRACT_OK,
+  MSG_USAGE_EXTRACT_LIMIT,
   UPLOAD_CHOICE_TITLE,
+  UPLOAD_CHOICE_MULTIPLE_HINT,
   UPLOAD_OPTION_CAMERA,
   UPLOAD_OPTION_CANCEL,
   UPLOAD_OPTION_GALLERY,
+  USAGE_DAILY_LIMIT,
 } from '../app-config';
 import { useAuth } from '../context/AuthContext';
-import type { PickedFile } from '../lib/documentPicker';
 import { takeDocumentPhoto } from '../lib/camera';
+import type { PickedFile } from '../lib/documentPicker';
 import { pickDocumentsFromDevice } from '../lib/documentPicker';
 import { extractDocuments } from '../lib/extractApi';
+import { getTodayUsage, incrementUsage, isOverLimit } from '../lib/usageLimits';
 import {
   CATEGORY_LABELS,
   getAllFieldEnNames,
@@ -37,7 +42,6 @@ type Message =
   | 'extract_ok'
   | 'extract_fail'
   | 'no_fields'
-  | 'need_login'
   | 'cancelled'
   | 'denied'
   | 'error';
@@ -46,7 +50,6 @@ function getMessageText(m: Message): string | null {
   if (m === 'uploaded' || m === 'extract_ok') return MSG_EXTRACT_OK;
   if (m === 'extract_fail') return MSG_EXTRACT_ERROR;
   if (m === 'no_fields') return MSG_EXTRACT_NO_FIELDS;
-  if (m === 'need_login') return MSG_EXTRACT_NEED_LOGIN;
   if (m === 'cancelled') return MSG_CAMERA_CANCELLED;
   if (m === 'denied') return MSG_CAMERA_PERMISSION_DENIED;
   if (m === 'error') return MSG_CAMERA_ERROR;
@@ -55,7 +58,9 @@ function getMessageText(m: Message): string | null {
 
 const CATEGORIES: TemplateFieldsCategory[] = ['resume', 'contract', 'waybill'];
 
-function getInitialSelectedFields(category: TemplateFieldsCategory): Set<string> {
+function getInitialSelectedFields(
+  category: TemplateFieldsCategory,
+): Set<string> {
   return new Set(getAllFieldEnNames(category));
 }
 
@@ -76,7 +81,7 @@ export function DocumentUploadSection() {
 
   function showChoice() {
     setMessage(null);
-    Alert.alert(UPLOAD_CHOICE_TITLE, '', [
+    Alert.alert(UPLOAD_CHOICE_TITLE, UPLOAD_CHOICE_MULTIPLE_HINT, [
       { text: UPLOAD_OPTION_CAMERA, onPress: handleTake },
       { text: UPLOAD_OPTION_GALLERY, onPress: handlePick },
       { text: UPLOAD_OPTION_CANCEL, style: 'cancel' },
@@ -90,7 +95,11 @@ export function DocumentUploadSection() {
       setMessage(null);
     } else
       setMessage(
-        result.error === 'permission' ? 'denied' : result.error === 'cancelled' ? 'cancelled' : 'error',
+        result.error === 'permission'
+          ? 'denied'
+          : result.error === 'cancelled'
+            ? 'cancelled'
+            : 'error',
       );
   }
 
@@ -122,8 +131,10 @@ export function DocumentUploadSection() {
   async function handleExtract() {
     if (!files?.length || isExtracting) return;
     setMessage(null);
-    if (!auth) {
-      setMessage('need_login');
+    const usage = await getTodayUsage();
+    if (isOverLimit('extract', usage, USAGE_DAILY_LIMIT)) {
+      const msg = auth ? MSG_USAGE_EXTRACT_LIMIT : MSG_DEVICE_DAILY_LIMIT;
+      Toast.show({ type: 'error', text1: msg });
       return;
     }
     const fields = Array.from(selectedFields);
@@ -136,6 +147,7 @@ export function DocumentUploadSection() {
       const result = await extractDocuments(files, category, fields);
       if (result.ok) {
         Toast.show({ type: 'success', text1: MSG_EXTRACT_OK });
+        await incrementUsage('extract');
         setFiles(null);
         setMessage(null);
       } else {
@@ -154,6 +166,7 @@ export function DocumentUploadSection() {
 
   return (
     <View style={styles.section}>
+      <Text style={styles.sectionTitle}>{LABEL_SECTION_EXTRACT}</Text>
       <Pressable style={styles.button} onPress={showChoice}>
         <Text style={styles.buttonLabel}>{BTN_UPLOAD_DOCUMENT}</Text>
       </Pressable>
@@ -168,7 +181,10 @@ export function DocumentUploadSection() {
             {CATEGORIES.map((c) => (
               <Pressable
                 key={c}
-                style={[styles.categoryBtn, category === c && styles.categoryBtnActive]}
+                style={[
+                  styles.categoryBtn,
+                  category === c && styles.categoryBtnActive,
+                ]}
                 onPress={() => {
                   setCategory(c);
                   setSelectedFields(getInitialSelectedFields(c));
@@ -213,15 +229,28 @@ export function DocumentUploadSection() {
 }
 
 const styles = StyleSheet.create({
-  section: { marginBottom: 24 },
+  section: { marginBottom: 48 },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#333',
+    marginBottom: 12,
+  },
   button: {
     paddingVertical: 12,
     paddingHorizontal: 24,
     backgroundColor: '#007AFF',
     borderRadius: 8,
     marginBottom: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  buttonLabel: { fontSize: 16, color: '#fff', fontWeight: '600' },
+  buttonLabel: {
+    fontSize: 16,
+    color: '#fff',
+    fontWeight: '600',
+    textAlign: 'center',
+  },
   buttonDisabled: { opacity: 0.6 },
   label: { fontSize: 14, marginBottom: 8, color: '#333' },
   fileList: { fontSize: 13, color: '#666', marginBottom: 12 },

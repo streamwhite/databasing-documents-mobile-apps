@@ -3,11 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ProfileScreen } from '../screens/ProfileScreen';
 import { LoginScreen } from '../screens/auth/LoginScreen';
 import { RegisterScreen } from '../screens/auth/RegisterScreen';
-import {
-  AUTH_BTN_LOGIN,
-  AUTH_BTN_REGISTER,
-  TAB_LABEL_PROFILE,
-} from '../app-config';
+import { AUTH_BTN_LOGIN, AUTH_BTN_REGISTER } from '../app-config';
 
 export type ProfileStackParamList = {
   ProfileMain: undefined;
@@ -23,7 +19,7 @@ export function ProfileStack() {
       <Stack.Screen
         name="ProfileMain"
         component={ProfileScreen}
-        options={{ title: TAB_LABEL_PROFILE }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Login"
