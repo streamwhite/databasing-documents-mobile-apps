@@ -208,6 +208,7 @@ Body (JSON):
             `for extract and query action, make notice(toast) less height, no go to status bar.`,
           ],
         ],
+        [`i am going build this to apk, what should i check before build?`],
       ],
     ],
   ],
