@@ -3,11 +3,12 @@ const ENV_API_BASE_URL_KEY = 'EXPO_PUBLIC_API_BASE_URL';
 const ENV_API_KEY_KEY = 'EXPO_PUBLIC_API_KEY';
 const ENV_MOBILE_TENANT_ID_KEY = 'EXPO_PUBLIC_MOBILE_TENANT_ID';
 const DEFAULT_API_KEY = 'd2623508-114a-4518-9051-74828889a130';
+const PRD_MOBILE_TENANT_ID = 'ejBwy6moCmwLFJ7FzWgoj5';
 
 /** Tenant for no-login extract/query (mobile testing). Override via EXPO_PUBLIC_MOBILE_TENANT_ID. */
 export const MOBILE_NO_LOGIN_TENANT_ID =
   (typeof process !== 'undefined' && process.env?.[ENV_MOBILE_TENANT_ID_KEY]) ||
-  'Nwa2YSWRutdnkYDhs4nz8H';
+  PRD_MOBILE_TENANT_ID;
 
 /** Request body key for tenant_id when calling POST /auth/mobile-token. */
 export const MOBILE_TOKEN_TENANT_ID_KEY = 'tenant_id';
