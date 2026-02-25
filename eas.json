@@ -7,18 +7,17 @@
     },
     "production": {
       "android": { "buildType": "app-bundle" },
-      "env": {
-        "EXPO_PUBLIC_API_BASE_URL": "https://ddapi.piaosiyuan.cn"
-      }
+      "env": { "EXPO_PUBLIC_API_BASE_URL": "https://ddapi.piaosiyuan.cn" }
     },
     "production-apk": {
       "android": { "buildType": "apk" },
-      "env": {
-        "EXPO_PUBLIC_API_BASE_URL": "https://ddapi.piaosiyuan.cn"
-      }
+      "env": { "EXPO_PUBLIC_API_BASE_URL": "https://ddapi.piaosiyuan.cn" }
+    },
+    "preview": {
+      "android": { "buildType": "apk" },
+      "distribution": "internal",
+      "env": { "EXPO_PUBLIC_API_BASE_URL": "https://ddapi.piaosiyuan.cn" }
     }
   },
-  "submit": {
-    "production": {}
-  }
+  "submit": { "production": {} }
 }

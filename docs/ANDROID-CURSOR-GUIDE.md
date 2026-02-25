@@ -19,34 +19,38 @@ You do **not** need Android Studio or an emulator for this workflow. For debuggi
 
 If Expo Go stays on the loading (spinning) screen and the terminal says **“No apps connected”**, the phone is not reaching Metro. Try in this order:
 
-**1. USB (most reliable)**  
-- Connect the phone with a **USB cable**.  
-- In a terminal (with the phone connected), run:  
-  `adb devices`  
-  (You should see your device. If not, check USB debugging and cable.)  
-- Then run:  
-  `adb reverse tcp:8081 tcp:8081`  
-- **Leave Metro running** (`pnpm start` in another terminal).  
-- On the phone: open **Expo Go** → **“Enter URL manually”** (or “Connect manually”) → enter:  
-  `exp://localhost:8081`  
-  (Over USB, `localhost` on the phone is forwarded to your computer’s 8081.)  
+**1. USB (most reliable)**
+
+- Connect the phone with a **USB cable**.
+- In a terminal (with the phone connected), run:
+  `adb devices`
+  (You should see your device. If not, check USB debugging and cable.)
+- Then run:
+  `adb reverse tcp:8081 tcp:8081`
+- **Leave Metro running** (`pnpm start` in another terminal).
+- On the phone: open **Expo Go** → **“Enter URL manually”** (or “Connect manually”) → enter:
+  `exp://localhost:8081`
+  (Over USB, `localhost` on the phone is forwarded to your computer’s 8081.)
 - If it still loads forever, try your computer’s LAN IP instead: e.g. `exp://192.168.1.100:8081` (replace with the IP shown when you run `pnpm start`), and ensure the phone is on the same Wi‑Fi only if you use this IP.
 
-**2. Tunnel (different Wi‑Fi or no USB)**  
-- Stop Metro (Ctrl+C), then run:  
-  `pnpm start:tunnel`  
-- Wait until the terminal shows a **tunnel URL** (e.g. `exp://xxx.ngrok.io` or similar).  
-- On the phone in Expo Go: **Enter URL manually** and paste that exact tunnel URL, or scan the **tunnel** QR code (not the LAN one).  
+**2. Tunnel (different Wi‑Fi or no USB)**
+
+- Stop Metro (Ctrl+C), then run:
+  `pnpm start:tunnel`
+- Wait until the terminal shows a **tunnel URL** (e.g. `exp://xxx.ngrok.io` or similar).
+- On the phone in Expo Go: **Enter URL manually** and paste that exact tunnel URL, or scan the **tunnel** QR code (not the LAN one).
 - If the tunnel URL never appears or fails, check your network/firewall; tunnel needs outbound HTTPS.
 
-**3. Same Wi‑Fi (LAN)**  
-- Phone and computer must be on the **same Wi‑Fi** (not guest network, not different VLAN).  
-- In Expo Go use **“Enter URL manually”** and type the URL Metro prints, e.g. `exp://192.168.x.x:8081`.  
+**3. Same Wi‑Fi (LAN)**
+
+- Phone and computer must be on the **same Wi‑Fi** (not guest network, not different VLAN).
+- In Expo Go use **“Enter URL manually”** and type the URL Metro prints, e.g. `exp://192.168.x.x:8081`.
 - If it still fails: **firewall** may be blocking 8081. On Linux, allow port 8081 (e.g. `sudo ufw allow 8081` if you use ufw), or temporarily disable the firewall to test.
 
-**4. General**  
-- Only one Metro process: quit any other `pnpm start` or `expo start` so port 8081 is free.  
-- Restart Metro with cache clear: `pnpm start -- --clear`, then try connecting again.  
+**4. General**
+
+- Only one Metro process: quit any other `pnpm start` or `expo start` so port 8081 is free.
+- Restart Metro with cache clear: `pnpm start -- --clear`, then try connecting again.
 - In Expo Go, clear app data or reinstall Expo Go if it’s stuck on an old project.
 
 ## Metro & Fast Refresh (keep it running, auto reload)
@@ -78,12 +82,15 @@ If `pnpm android` fails with **"NDK at .../ndk/27.1.12297006 did not have a sour
    rm -rf $ANDROID_HOME/ndk/27.1.12297006
    ```
 2. **Reinstall the NDK** using the SDK command-line tools:
+
    ```bash
    $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "ndk;27.1.12297006"
    ```
+
    If `cmdline-tools/latest` is missing, install it first: Android Studio → **Settings → Appearance & Behavior → System Settings → Android SDK** → **SDK Tools** tab → enable **Android SDK Command-line Tools** → Apply. Then run the `sdkmanager` command above from the path shown in SDK location (e.g. `~/Android/Sdk/cmdline-tools/latest/bin/sdkmanager`).
 
    **Alternative:** In Android Studio → **Settings → Android SDK → SDK Tools** → uncheck **NDK (Side by side)**, Apply → check it again and choose version **27.1.12297006** if offered → Apply to reinstall.
+
 3. Run **`pnpm android`** again.
 
 ## Run on physical Android device
@@ -157,19 +164,48 @@ Use **EAS Build** to produce a release build for distribution (Google Play or si
 Same as production build but outputs a single **APK** (no Play Store upload):
 
 - `eas build -p android --profile production-apk`
-  Download the APK from the build page and install on the device (enable “Install from unknown sources” if needed).
+- Download the APK from the build page and install on the device (enable “Install from unknown sources” if needed).
 
-### Sideload APK (testing / non-Play)
+### Preview profile (sideload / testing)
 
-For a quick test APK (e.g. internal distribution):
+For a quick test APK (e.g. internal distribution), use the **preview** profile (APK, internal distribution, same prod API URL as in `eas.json`):
 
 - `eas build -p android --profile preview`
-  Download the APK and install on the device.
+- Download the APK from the build page and install on the device.
+
+### Build APK locally (no EAS)
+
+To build the release APK on your **local machine** instead of EAS:
+
+1. **One-time:** Generate the native `android/` project (if not already present):
+
+   ```bash
+   npx expo prebuild -p android
+   ```
+
+2. **Build release APK:**
+
+   ```bash(allow to run this on fish)
+   npx expo run:android --variant release
+   ```
+
+   The APK is written to `android/app/build/outputs/apk/release/app-release.apk` (path may vary slightly). Install it on the device or copy elsewhere.
+
+   **Or** use Gradle directly after prebuild:
+
+   ```bash
+   cd android && ./gradlew assembleRelease && cd ..
+   ```
+
+   Output: `android/app/build/outputs/apk/release/app-release.apk`.
+
+**Note:** Local builds use `.env` (or your shell env) for `EXPO_PUBLIC_*`; they do **not** use `eas.json` env. Set `EXPO_PUBLIC_API_BASE_URL` in `.env` to your backend URL (e.g. `https://ddapi.piaosiyuan.cn`) before building.
 
 ### Summary
 
-| Goal               | Command                                         | Output |
-| ------------------ | ----------------------------------------------- | ------ |
-| Play Store release | `eas build -p android --profile production`     | `.aab` |
-| **Production APK** | `eas build -p android --profile production-apk` | `.apk` |
-| Sideload / test    | `eas build -p android --profile preview`        | `.apk` |
+| Goal               | Command                                         | Output                             |
+| ------------------ | ----------------------------------------------- | ---------------------------------- |
+| Play Store release | `eas build -p android --profile production`     | `.aab`                             |
+| **Production APK** | `eas build -p android --profile production-apk` | `.apk`                             |
+| Preview / test     | `eas build -p android --profile preview`        | `.apk`                             |
+| **Local APK**      | `npx expo run:android --variant release`        | `.apk` (in `android/.../release/`) |

@@ -1,4 +1,4 @@
-const DEFAULT_API_BASE_URL = 'http://localhost:4020';
+const DEFAULT_API_BASE_URL = 'https://ddapi.piaosiyuan.cn';
 const ENV_API_BASE_URL_KEY = 'EXPO_PUBLIC_API_BASE_URL';
 const ENV_API_KEY_KEY = 'EXPO_PUBLIC_API_KEY';
 const ENV_MOBILE_TENANT_ID_KEY = 'EXPO_PUBLIC_MOBILE_TENANT_ID';
